@@ -2,14 +2,14 @@
 const mongoose = require('mongoose');
 
 // Import the board model
-const Board = require('../models/boards');
+const Boards = require('../models/boards');
 
 // Route POST api/v1/boards/create
 // Create new board
 exports.createBoard = async  (req, res, next) => {
     const {title} = req.body;
     try {
-        const newBoard = await Board.create({
+        const newBoard = await Boards.create({
             title,
             columnOrder: []
         });
@@ -31,11 +31,11 @@ exports.createBoard = async  (req, res, next) => {
 // Get all boards
 exports.getAllBoards = async (req, res, next) => {
     try {
-        const boards = await Board.find();
-    if (boards) {
-        res.status(200).json({
-            boards
-        });
+        const boards = await Boards.find();
+        if (boards) {
+            res.status(200).json({
+             boards
+            });
     }
     } catch (error) {
         console.log(error);
@@ -52,11 +52,12 @@ exports.getAllBoards = async (req, res, next) => {
 
 exports.getBoard = async (req, res, next) => {
     try {
-        const board = await Board.findOne({_id: req.params.boardId});
+        const id = req.params.boardId;
+        const board = await Boards.findById(id);
 
         if (board) {
             res.status(200).json({
-                boards
+                board
             });
         }
     } catch (error) {
@@ -74,7 +75,7 @@ exports.reorderBoard = async (req,res,next) => {
     try {
         const {boardId, newColumnOrder} = req.body;
     if (boardId && newColumnOrder)  {
-        const updatedBoard = await Board.findByIdAndUpdate(boardId, {columnOrder: newColumnOrder});
+        const updatedBoard = await Boards.findByIdAndUpdate(boardId, {columnOrder: newColumnOrder});
     }
     if (board) {
         res.status(200).json({
@@ -88,4 +89,19 @@ exports.reorderBoard = async (req,res,next) => {
     }); 
     }
     
+}
+
+
+// Delete Board
+
+exports.deleteBoard = async (req, res, next) => {
+    try {
+        const board = await Boards.findByIdAndRemove(req.params.boardId);
+
+    } catch (error) {
+        console.log(error);
+       res.status(400).json({
+        error: error.message
+    }); 
+    }
 }

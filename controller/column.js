@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Column = require('../models/column');
 const Boards = require('../models/boards');
-const Board = require('../models/boards');
+
 
 exports.createColumn = async (req, res, next) => {
     try {
@@ -13,7 +13,7 @@ exports.createColumn = async (req, res, next) => {
             cardIds: [],
             columnId
         });
-        const board = await Board.findById(boardId);
+        const board = await Boards.findById(boardId);
         if (!board) {
             res.status(400).json({
                 message: 'Board doesnot exist'
@@ -21,7 +21,7 @@ exports.createColumn = async (req, res, next) => {
         }
         const newColumnOrder = Array.from(board.columnOrder);
         newColumnOrder.push(column.columnId);
-        const updateBoard = await Board.findByIdAndUpdate(board._Id, { columnOrder: newColumnOrder });
+        const updateBoard = await Boards.findByIdAndUpdate(board._Id, { columnOrder: newColumnOrder });
         if (updateBoard) {
             res.status(200).json({
                 column,

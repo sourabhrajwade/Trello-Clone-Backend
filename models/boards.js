@@ -6,6 +6,6 @@ const BoardSchema = new mongoose.Schema({
   columnOrder: [{ type: String, ref: 'columns' }],
 });
 
-const Board = mongoose.model('boards', BoardSchema, 'boards');
+const Board = mongoose.model('Boards', BoardSchema, 'boards');
 
 module.exports = Board;
