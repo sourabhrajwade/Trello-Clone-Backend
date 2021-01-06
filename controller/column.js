@@ -7,18 +7,18 @@ const Boards = require('../models/boards');
 exports.createColumn = async (req, res, next) => {
     try {
         const { title, boardId, columnId } = req.body;
-        const column = await Column.create({
-            board: boardId,
-            title,
-            cardIds: [],
-            columnId
-        });
         const board = await Boards.findById(boardId);
         if (!board) {
             res.status(400).json({
                 message: 'Board doesnot exist'
             })
         }
+        const column = await Column.create({
+            board: boardId,
+            title,
+            columnId
+        });
+
         const newColumnOrder = Array.from(board.columnOrder);
         newColumnOrder.push(column.columnId);
         const updateBoard = await Boards.findByIdAndUpdate(board._Id, { columnOrder: newColumnOrder });
@@ -40,7 +40,7 @@ exports.createColumn = async (req, res, next) => {
 
 exports.getColumn = async (req, res, next) => {
     try {
-        const column = await Column.findOne({ _id: req.param.columnId });
+        const column = await Column.findById( req.params.columnId);
         if (!column) {
             return res.status(400).json({
                 message: 'Column not found.'

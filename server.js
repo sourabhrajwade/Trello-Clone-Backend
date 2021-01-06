@@ -15,7 +15,8 @@ mongoose
   .connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.hh5l0.mongodb.net/${process.env.dbname}?retryWrites=true&w=majority`, {
     useNewUrlParser: true,
     useCreateIndex: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    useFindAndModify: false
   })
   .then(() => {
     console.log("Database connected");
