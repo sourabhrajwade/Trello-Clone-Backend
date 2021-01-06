@@ -67,21 +67,21 @@ exports.fetchAll = async (req, res, next) => {
     try {
         const { boardId } = req.params;
 
-        const board = await Board.findOne({ _id: boardId });
+        const board = await Boards.find({ _id: boardId });
         if (!board) {
             return res
-                .status(404)
+                .status(400)
                 .json({ message: 'Board with given id was not found' });
         }
         const column = await Column.find({ board: boardId });
         if (!column) {
-            return res.status(400).json({
+            res.status(404).json({
                 message: "Column doesnot exist."
             });
         }
-        return res
+        res
             .status(200)
-            .json({ message: 'success', columns: columns, board: board });
+            .json({ message: 'success', column: column, board: board });
 
     } catch (error) {
         console.log(error);
